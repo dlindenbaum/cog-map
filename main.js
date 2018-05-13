@@ -2,16 +2,28 @@ import 'ol/ol.css';
 import Map from 'ol/map';
 import View from 'ol/view';
 import TileLayer from 'ol/layer/tile';
+import Style from 'ol/style/style';
+import Stroke from 'ol/style/stroke';
+import Fill from 'ol/style/fill';
 import XYZ from 'ol/source/xyz';
 import proj from 'ol/proj'; //is this the right way to pull this in? Or should it just be a single class?
-import Attribution from 'ol/'
+import Attribution from 'ol/';
+import MVT from 'ol/format/mvt';
+import VectorTileLayer from 'ol/layer/vectortile';
+import VectorTileSource from 'ol/source/vectortile';
 import sync from 'ol-hashed';
 import hashed from 'hashed';
 import { getJSON } from 'jquery';
 import validUrl from 'valid-url';
 
 
-var spacenetURL = ""
+
+var mapboxAPIK = 'pk.eyJ1IjoiZGF2aWRsaW5kZW5iYXVtIiwiYSI6ImNqaDU3OW9nMjB2M2Yyd28ydW1lNGxuOGEifQ.erGt8qc8r4DenEnSpqf4hg'
+var spacenetURL_Vegas = "s3://spacenet-dataset/AOI_2_Vegas/srcData/rasterData/AOI_2_Vegas_MUL-PanSharpen_Cloud.tif"
+var spacenetURL_Paris = "s3://spacenet-dataset/AOI_3_Paris/srcData/rasterData/AOI_3_Paris_MUL-PanSharpen_Cloud.tif"
+var spacenetURL_Shanghai = "s3://spacenet-dataset/AOI_2_Vegas/srcData/rasterData/AOI_2_Vegas_MUL-PanSharpen_Cloud.tif"
+var spacenetURL_Khartoum = "s3://spacenet-dataset/AOI_2_Vegas/srcData/rasterData/AOI_2_Vegas_MUL-PanSharpen_Cloud.tif"
+var spacenetURL = spacenetURL_Vegas
 var labels = new TileLayer({
   title: 'Labels',
   source: new XYZ({
@@ -22,6 +34,90 @@ var labels = new TileLayer({
   })
 });
 
+var highlightStyle = new Style({
+        stroke: new Stroke({
+          color: '#FF0000',
+          width: 1
+        }),
+        fill: new Fill({
+          color: 'rgba(255,0,0,0.1)'
+        })
+      });
+
+var roadlightStyle = new Style({
+        stroke: new Stroke({
+          color: '#00ff00',
+          width: 2
+        }),
+        fill: new Fill({
+          color: 'rgba(0,255,0,0.3)'
+        })
+      });
+
+/*
+var footPrintLayer = new TileLayer({
+  title: 'footPrintLayer',
+  source: new XYZ({
+
+    url: 'http://fileservercw01.labs.internal:8095/_/{z}/{x}/{y}@2x.png',
+    attributions: '© <a href="http://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>, ' +
+         '© <a href="https://carto.com/attribution">CARTO</a>',
+  })
+});
+*/
+
+
+var footPrintLayer = new VectorTileLayer({
+  style: highlightStyle,
+  source: new VectorTileSource({
+    attributions: [
+      '<a href="http://www.openmaptiles.org/" target="_blank">&copy; OpenMapTiles</a>',
+      '<a href="http://www.openstreetmap.org/about/" target="_blank">&copy; OpenStreetMap contributors</a>'
+    ],
+    format: new MVT(),
+    url: 'https://api.mapbox.com/v4/davidlindenbaum.6chimvgs/{z}/{x}/{y}.vector.pbf?access_token=' + mapboxAPIK, //"http://fileservercw01.labs.internal:8095/{z}/{x}/{y}.pbf",
+    maxZoom: 17,
+  })
+});
+
+footPrintLayer.changed()
+
+var footPrintLayerT = new VectorTileLayer({
+  source: new VectorTileSource({
+    attributions: [
+      '<a href="http://www.openmaptiles.org/" target="_blank">&copy; OpenMapTiles</a>',
+      '<a href="http://www.openstreetmap.org/about/" target="_blank">&copy; OpenStreetMap contributors</a>'
+    ],
+    format: new MVT(),
+    url: "http://fileservercw01.labs.internal:8096/{z}/{x}/{y}.pbf",
+    maxZoom: 17
+
+
+  })
+});
+
+var roadLayer = new VectorTileLayer({
+  style: roadlightStyle,
+  source: new VectorTileSource({
+    attributions: [
+      '<a href="http://www.openmaptiles.org/" target="_blank">&copy; OpenMapTiles</a>',
+      '<a href="http://www.openstreetmap.org/about/" target="_blank">&copy; OpenStreetMap contributors</a>'
+    ],
+    format: new MVT(),
+    url: 'https://api.mapbox.com/v4/davidlindenbaum.2dbbqese/{z}/{x}/{y}.vector.pbf?access_token=' + mapboxAPIK, //"http://fileservercw01.labs.internal:8095/{z}/{x}/{y}.pbf",
+    maxZoom: 17,
+  })
+});
+
+
+footPrintLayer.setZIndex(7);
+footPrintLayer.setOpacity(1.0)
+footPrintLayerT.setZIndex(6);
+footPrintLayerT.setOpacity(1.0)
+roadLayer.setZIndex(7);
+roadLayer.setOpacity(1.0)
+
+
 const map = new Map({
   target: 'map',
   layers: [
@@ -30,7 +126,11 @@ const map = new Map({
         url: 'https://{1-4}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}.png'
       })
     }),
-    labels
+    labels,
+    footPrintLayer,
+    footPrintLayerT,
+    roadLayer
+
   ],
   view: new View({
     center: [0, 0],
@@ -60,8 +160,11 @@ function zoomLoad(name, rgb="1,2,3", linearStretch="True", tileType="tiles", ban
         })
       });
       var layers = map.getLayers();
-      layers.removeAt(2); //remove the previous COG map, so we're not loading extra tiles as we move around.
+      layers.removeAt(5)
+      //layers.removeAt(3); //remove the previous COG map, so we're not loading extra tiles as we move around.
       map.addLayer(cogLayer);
+      //map.addLayer(footPrintLayerT)
+
       update({
         url: name
       });
@@ -144,6 +247,8 @@ function listener(newState) {
     });
 
     map.addLayer(cogLayer);
+    //map.addLayer(footPrintLayer)
+    //map.addLayer(footPrintLayerT)
 
     document.getElementById("cog-url").value = newState.url;
     //This had an attempt to move to a COG location, but then it messed up with existing hashes.
