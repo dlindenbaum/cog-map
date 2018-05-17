@@ -135,32 +135,50 @@
     .button:hover {
       background-color: rgba(255, 255, 255, 0.79);
     }
-
-
     </style>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+
+
   </head>
   <body>
     <div id="map" class="map" ></div>
     <div class="controls">
       <!--p><input type="checkbox" id="labels" name="labels"  checked="true"> Labels</p--> 
-<section class="flexbox">      
-        <div class="text"> COG URL:</div>
+    <section class="flexbox">
+        <div class="dropdown">
+        <button class="aoi-selectDrop" type="button" id="aoi-selectDrop" data-toggle="dropdown">AOI Selection
+        <span class="caret"></span></button>
+        <ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
+            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">AOI 2 Vegas</a></li>
+            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">AOI 3 Paris</a></li>
+            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">AOI 4 Shanghai</a></li>
+            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">AOI 5 Khartoum</a></li>
+        </ul>
+    </div>
+
+    <div class="text"> COG URL:</div>
+<!--
         <div class="stretch">
             <input type="text" class="text-field" name="cog-url" id="cog-url"  placeholder="Enter COG URL or click on a sample" />
         </div>
         <div class="normal" id="submit-url">
             <button>Submit</button>
         </div>
+-->
 
        <!--  
         <input type="text" class="text-field"  name="cog-url" id="cog-url"  size="110" value="http://oin-hotosm.s3.amazonaws.com/594ab0ba1b114600111194a3/0/d66720c4-148c-4e11-9d54-4ae2a6ba6351.tif"> 
         <button class="button" id="submit-url">Submit</button> -->
       </section> 
         <div class="samples">
-      <button class="button" id="sample-1">Las-Vegas-Analytic</button>
-      <button class="button" id="sample-2">Las-Vegas-RGB</button>
-      <button class="button" id="sample-3">Las-Vegas-FalseColor</button>
-            <button class="button" id="sample-4">Las-Vegas-NDVI</button>
+      <button class="button" id="sample-1">Las-Vegas</button>
+      <button class="button" id="sample-2">Paris</button>
+      <button class="button" id="sample-3">Shanghai</button>
+            <button class="button" id="sample-4">Khartoum</button>
     </div>
     </div>
 

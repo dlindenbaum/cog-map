@@ -21,8 +21,8 @@ import validUrl from 'valid-url';
 var mapboxAPIK = 'pk.eyJ1IjoiZGF2aWRsaW5kZW5iYXVtIiwiYSI6ImNqaDU3OW9nMjB2M2Yyd28ydW1lNGxuOGEifQ.erGt8qc8r4DenEnSpqf4hg'
 var spacenetURL_Vegas = "s3://spacenet-dataset/AOI_2_Vegas/srcData/rasterData/AOI_2_Vegas_MUL-PanSharpen_Cloud.tif"
 var spacenetURL_Paris = "s3://spacenet-dataset/AOI_3_Paris/srcData/rasterData/AOI_3_Paris_MUL-PanSharpen_Cloud.tif"
-var spacenetURL_Shanghai = "s3://spacenet-dataset/AOI_2_Vegas/srcData/rasterData/AOI_2_Vegas_MUL-PanSharpen_Cloud.tif"
-var spacenetURL_Khartoum = "s3://spacenet-dataset/AOI_2_Vegas/srcData/rasterData/AOI_2_Vegas_MUL-PanSharpen_Cloud.tif"
+var spacenetURL_Shanghai = "s3://spacenet-dataset/AOI_4_Shanghai/srcData/rasterData/AOI_4_Shanghai_MUL-PanSharpen_Cloud.tif"
+var spacenetURL_Khartoum = "s3://spacenet-dataset/AOI_5_Khartoum/srcData/rasterData/AOI_5_Khartoum_MUL-PanSharpen_Cloud.tif"
 var spacenetURL = spacenetURL_Vegas
 var labels = new TileLayer({
   title: 'Labels',
@@ -157,7 +157,8 @@ function zoomLoad(name, rgb="1,2,3", linearStretch="True", tileType="tiles", ban
         type: 'base',
         source: new XYZ({
           url: tilesUrl
-        })
+        }),
+        minZoom: 12
       });
       var layers = map.getLayers();
       layers.removeAt(5)
@@ -193,23 +194,23 @@ function createTilesUrl(url="", rgb="1,2,3", linearStretch="True", tileType="til
 // })
 
 onClick('sample-1', function() {
-  spacenetURL = document.getElementById("cog-url").value // = spacenetURL;
-  zoomLoad(spacenetURL, "1,2,3", "False");
+  //spacenetURL = document.getElementById("cog-url").value // = spacenetURL;
+  zoomLoad(spacenetURL_Vegas, "5,3,2", "true");//"1,2,3", "False");
 });
 
 onClick('sample-2', function() {
-  spacenetURL = document.getElementById("cog-url").value // = spacenetURL;
-  zoomLoad(spacenetURL, "5,3,2", "true");
+  //spacenetURL = document.getElementById("cog-url").value // = spacenetURL;
+  zoomLoad(spacenetURL_Paris, "5,3,2", "true");
 });
 
 onClick('sample-3', function() {
-  spacenetURL = document.getElementById("cog-url").value // = spacenetURL;
-  zoomLoad(spacenetURL, "7,5,3", "true");
+  //spacenetURL = document.getElementById("cog-url").value // = spacenetURL;
+  zoomLoad(spacenetURL_Shanghai, "5,3,2", "true"); //"7,5,3", "true");
 });
 
 onClick('sample-4', function() {
-  spacenetURL = document.getElementById("cog-url").value // = spacenetURL;
-  zoomLoad(spacenetURL, "7,5,2", "true", "NDtiles");
+  //spacenetURL = document.getElementById("cog-url").value // = spacenetURL;
+  zoomLoad(spacenetURL_Khartoum, "5,3,2", "true"); //"7,5,2", "true", "NDtiles");
 });
 
 
@@ -250,7 +251,7 @@ function listener(newState) {
     //map.addLayer(footPrintLayer)
     //map.addLayer(footPrintLayerT)
 
-    document.getElementById("cog-url").value = newState.url;
+    //document.getElementById("cog-url").value = newState.url;
     //This had an attempt to move to a COG location, but then it messed up with existing hashes.
     //May consider adding a button that will zoom the user to the location of the COG displayed.
   }
