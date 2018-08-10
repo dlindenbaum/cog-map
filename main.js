@@ -9,6 +9,9 @@ import XYZ from 'ol/source/xyz';
 import proj from 'ol/proj'; //is this the right way to pull this in? Or should it just be a single class?
 import Attribution from 'ol/';
 import MVT from 'ol/format/mvt';
+import GeoJSONT from 'ol/format/geojson'
+import VectorL from 'ol/layer/vector'
+import VectorS from 'ol/source/vector'
 import VectorTileLayer from 'ol/layer/vectortile';
 import VectorTileSource from 'ol/source/vectortile';
 import sync from 'ol-hashed';
@@ -37,6 +40,16 @@ var labels = new TileLayer({
 var highlightStyle = new Style({
         stroke: new Stroke({
           color: '#FF0000',
+          width: 1
+        }),
+        fill: new Fill({
+          color: 'rgba(255,0,0,0.1)'
+        })
+      });
+
+var highlightStyle1 = new Style({
+        stroke: new Stroke({
+          color: '#0000ff',
           width: 1
         }),
         fill: new Fill({
@@ -82,6 +95,35 @@ var footPrintLayer = new VectorTileLayer({
 
 footPrintLayer.changed()
 
+var footPrintLayer_Tern = new VectorTileLayer({
+  style: highlightStyle1,
+  source: new VectorTileSource({
+    attributions: [
+      '<a href="http://www.openmaptiles.org/" target="_blank">&copy; OpenMapTiles</a>',
+      '<a href="http://www.openstreetmap.org/about/" target="_blank">&copy; OpenStreetMap contributors</a>'
+    ],
+    format: new MVT(),
+    url: 'https://api.mapbox.com/v4/davidlindenbaum.3tkv29lu/{z}/{x}/{y}.vector.pbf?access_token=' + mapboxAPIK, //"http://fileservercw01.labs.internal:8095/{z}/{x}/{y}.pbf",
+    maxZoom: 17,
+  })
+});
+
+footPrintLayer_Tern.changed()
+
+
+
+var aoiLayer = new VectorL({
+            source: new VectorS({
+                format: new GeoJSONT(),
+                url: 'https://raw.githubusercontent.com/SpaceNetChallenge/utilities/spacenetV3/spacenetutilities/datasets/SpaceNetSummaryTindex.geojson'
+            })
+
+        });
+
+
+
+
+
 var footPrintLayerT = new VectorTileLayer({
   source: new VectorTileSource({
     attributions: [
@@ -112,10 +154,14 @@ var roadLayer = new VectorTileLayer({
 
 footPrintLayer.setZIndex(7);
 footPrintLayer.setOpacity(1.0)
+footPrintLayer_Tern.setZIndex(7);
+footPrintLayer_Tern.setOpacity(1.0)
 footPrintLayerT.setZIndex(6);
 footPrintLayerT.setOpacity(1.0)
 roadLayer.setZIndex(7);
 roadLayer.setOpacity(1.0)
+aoiLayer.setOpacity(0.3)
+aoiLayer.setZIndex(1)
 
 
 const map = new Map({
@@ -129,7 +175,9 @@ const map = new Map({
     labels,
     footPrintLayer,
     footPrintLayerT,
-    roadLayer
+    footPrintLayer_Tern,
+    roadLayer,
+    aoiLayer
 
   ],
   view: new View({
@@ -160,11 +208,20 @@ function zoomLoad(name, rgb="1,2,3", linearStretch="True", tileType="tiles", ban
         }),
         minZoom: 12
       });
+
+
+
       var layers = map.getLayers();
-      layers.removeAt(5)
+      layers.removeAt(7)
       //layers.removeAt(3); //remove the previous COG map, so we're not loading extra tiles as we move around.
       map.addLayer(cogLayer);
       //map.addLayer(footPrintLayerT)
+
+
+
+
+
+
 
       update({
         url: name
