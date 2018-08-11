@@ -95,7 +95,7 @@ var footPrintLayer = new VectorTileLayer({
 
 footPrintLayer.changed()
 
-var footPrintLayer_Tern = new VectorTileLayer({
+var footPrintLayer_Vegas = new VectorTileLayer({
   style: highlightStyle1,
   source: new VectorTileSource({
     attributions: [
@@ -108,7 +108,37 @@ var footPrintLayer_Tern = new VectorTileLayer({
   })
 });
 
-footPrintLayer_Tern.changed()
+footPrintLayer_Vegas.changed()
+
+var footPrintLayer_Shanghai = new VectorTileLayer({
+  style: highlightStyle1,
+  source: new VectorTileSource({
+    attributions: [
+      '<a href="http://www.openmaptiles.org/" target="_blank">&copy; OpenMapTiles</a>',
+      '<a href="http://www.openstreetmap.org/about/" target="_blank">&copy; OpenStreetMap contributors</a>'
+    ],
+    format: new MVT(),
+    url: 'https://api.mapbox.com/v4/davidlindenbaum.0fpmkh2y/{z}/{x}/{y}.vector.pbf?access_token=' + mapboxAPIK, //"http://fileservercw01.labs.internal:8095/{z}/{x}/{y}.pbf",
+    maxZoom: 17,
+  })
+});
+
+footPrintLayer_Shanghai.changed()
+
+var footPrintLayer_Khartoum = new VectorTileLayer({
+  style: highlightStyle1,
+  source: new VectorTileSource({
+    attributions: [
+      '<a href="http://www.openmaptiles.org/" target="_blank">&copy; OpenMapTiles</a>',
+      '<a href="http://www.openstreetmap.org/about/" target="_blank">&copy; OpenStreetMap contributors</a>'
+    ],
+    format: new MVT(),
+    url: 'https://api.mapbox.com/v4/davidlindenbaum.7ktu2nqz/{z}/{x}/{y}.vector.pbf?access_token=' + mapboxAPIK, //"http://fileservercw01.labs.internal:8095/{z}/{x}/{y}.pbf",
+    maxZoom: 17,
+  })
+});
+
+footPrintLayer_Khartoum.changed()
 
 
 
@@ -154,14 +184,19 @@ var roadLayer = new VectorTileLayer({
 
 footPrintLayer.setZIndex(7);
 footPrintLayer.setOpacity(1.0)
-footPrintLayer_Tern.setZIndex(7);
-footPrintLayer_Tern.setOpacity(1.0)
+footPrintLayer_Vegas.setZIndex(7);
+footPrintLayer_Vegas.setOpacity(1.0)
 footPrintLayerT.setZIndex(6);
 footPrintLayerT.setOpacity(1.0)
 roadLayer.setZIndex(7);
 roadLayer.setOpacity(1.0)
 aoiLayer.setOpacity(0.3)
 aoiLayer.setZIndex(1)
+footPrintLayer_Shanghai.setZIndex(7);
+footPrintLayer_Shanghai.setOpacity(1.0)
+footPrintLayer_Khartoum.setZIndex(7);
+footPrintLayer_Khartoum.setOpacity(1.0)
+
 
 
 const map = new Map({
@@ -175,7 +210,9 @@ const map = new Map({
     labels,
     footPrintLayer,
     footPrintLayerT,
-    footPrintLayer_Tern,
+    footPrintLayer_Vegas,
+    footPrintLayer_Shanghai,
+    footPrintLayer_Khartoum,
     roadLayer,
     aoiLayer
 
@@ -212,7 +249,7 @@ function zoomLoad(name, rgb="1,2,3", linearStretch="True", tileType="tiles", ban
 
 
       var layers = map.getLayers();
-      layers.removeAt(7)
+      layers.removeAt(9)
       //layers.removeAt(3); //remove the previous COG map, so we're not loading extra tiles as we move around.
       map.addLayer(cogLayer);
       //map.addLayer(footPrintLayerT)
