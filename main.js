@@ -208,14 +208,11 @@ const map = new Map({
       })
     }),
     labels,
-    footPrintLayer,
     footPrintLayerT,
     footPrintLayer_Vegas,
     footPrintLayer_Shanghai,
     footPrintLayer_Khartoum,
-    roadLayer,
     aoiLayer
-
   ],
   view: new View({
     center: [0, 0],
