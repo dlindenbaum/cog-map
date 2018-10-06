@@ -246,7 +246,7 @@ function zoomLoad(name, rgb="1,2,3", linearStretch="True", tileType="tiles", ban
 
 
       var layers = map.getLayers();
-      layers.removeAt(9)
+      layers.removeAt(7)
       //layers.removeAt(3); //remove the previous COG map, so we're not loading extra tiles as we move around.
       map.addLayer(cogLayer);
       //map.addLayer(footPrintLayerT)
