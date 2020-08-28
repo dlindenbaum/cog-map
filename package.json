@@ -10,7 +10,7 @@
     "valid-url": "^1.0.9"
   },
   "devDependencies": {
-    "parcel-bundler": "^1.2.1"
+    "parcel-bundler": "^1.10.0"
   },
   "scripts": {
     "start": "parcel index.html",
