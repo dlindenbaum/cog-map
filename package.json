@@ -5,7 +5,7 @@
   "main": "main.js",
   "dependencies": {
     "jquery": "^3.2.1",
-    "ol": "^4.6.4",
+    "ol": "^6.6.0",
     "ol-hashed": "^1.0.2",
     "valid-url": "^1.0.9"
   },
